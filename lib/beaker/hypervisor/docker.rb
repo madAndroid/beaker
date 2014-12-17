@@ -6,6 +6,7 @@ module Beaker
       @options = options
       @logger = options[:logger]
       @hosts = hosts
+      @temp_files = []
 
       # increase the http timeouts as provisioning images can be slow
       ::Docker.options = { :write_timeout => 300, :read_timeout => 300 }
@@ -43,12 +44,15 @@ module Beaker
         end
         port = container.json["NetworkSettings"]["Ports"]["22/tcp"][0]["HostPort"]
 
+        forward_agent = @options['forward_agent'] || false
+
         # Update host metadata
         host['ip']  = ip
         host['port'] = port
         host['ssh']  = {
           :password => root_password,
           :port => port,
+          :forward_agent => forward_agent,
         }
 
         @logger.debug("node available as  ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@#{ip} -p #{port}")

@@ -139,6 +139,9 @@ module Beaker
         copy_ssh_to_root host, @options
         #ensure that root login is enabled for this host
         enable_root_login host, @options
+        #ensure that proxy is set if it's been configured
+        proxy_package_manager host, @options
+
         #shut down connection, will reconnect on next exec
         host.close
 

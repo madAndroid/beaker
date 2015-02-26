@@ -140,7 +140,7 @@ module Beaker
         #ensure that root login is enabled for this host
         enable_root_login host, @options
         #ensure that proxy is set if it's been configured
-        proxy_package_manager host, @options
+        proxy_package_manager
 
         #shut down connection, will reconnect on next exec
         host.close

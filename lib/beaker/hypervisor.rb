@@ -110,6 +110,9 @@ module Beaker
       if @options[:disable_iptables]
         disable_iptables @hosts, @options
       end
+      if @options[:package_proxy]
+        package_proxy @hosts, @options
+      end
       set_env(@hosts, @options)
     end
 

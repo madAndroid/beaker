@@ -33,6 +33,9 @@ module Beaker
         v_file << "    v.vm.box_check_update = '#{host['box_check_update'] ||= 'true'}'\n"
         v_file << "    v.vm.synced_folder '.', '/vagrant', disabled: true\n" if host['synced_folder'] == 'disabled'
         v_file << "    v.vm.network :private_network, ip: \"#{host['ip'].to_s}\", :netmask => \"#{host['netmask'] ||= "255.255.0.0"}\", :mac => \"#{randmac}\"\n"
+        host['port_forwards'].each_pair do |comment,ports|
+          v_file << "    v.vm.network :forwarded_port, guest: #{ports['guest']}, host: #{ports['host']} # #{comment}\n"
+        end
 
         if /windows/i.match(host['platform'])
           v_file << "    v.vm.network :forwarded_port, guest: 3389, host: 3389\n"
